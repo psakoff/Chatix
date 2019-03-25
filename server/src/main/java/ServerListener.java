@@ -2,15 +2,13 @@ import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 
 
 class ServerListener extends Thread {
 
     private Socket socket;
-    private BufferedReader in;
-    private BufferedWriter out;
+    protected BufferedReader in;
+    protected BufferedWriter out;
     private String name;
     private String type;
     private ServerListener client;
@@ -34,7 +32,6 @@ class ServerListener extends Thread {
         this.client = null;
 
         try {
-            //никнейм
             initialize();
             try {
                 while (true) {
@@ -74,7 +71,8 @@ class ServerListener extends Thread {
         }
     }
 
-    private void initialize() throws IOException {
+
+    protected void initialize() throws IOException {
         String temp;
         temp = in.readLine();
         type = temp;

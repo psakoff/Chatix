@@ -7,6 +7,7 @@ import java.util.Date;
 
 class ClientListener {
 
+
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
@@ -14,24 +15,21 @@ class ClientListener {
     private String addr;
     private int port;
     private String nickname;
-    private String type;
+    protected String type;
     private Date time;
     private String dtime;
     private SimpleDateFormat dt1;
 
-    public ClientListener(String addr, int port) {
-        this.addr = addr;
-        this.port = port;
-        try {
-            this.socket = new Socket(addr, port);
-        } catch (IOException e) {
-            System.err.println("Socket failed");
-        }
+    public ClientListener(Socket socket) {
+        this.socket = socket;
+    }
+
+    protected void start() throws IOException{
         try {
             // потоки чтения из сокета / записи в сокет, и чтения с консоли
             inputUser = new BufferedReader(new InputStreamReader(System.in));
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
             this.pressNickname();
             new ReadMsg().start();
             new WriteMsg().start();
@@ -41,9 +39,7 @@ class ClientListener {
 
     }
 
-
-
-    private void pressNickname() {
+    protected void pressNickname() {
         System.out.print("agent or client? input agent/client ");
         try {
             type = inputUser.readLine();
@@ -65,7 +61,7 @@ class ClientListener {
     }
 
 
-    private void downService() {
+    protected void downService() {
         try {
             if (!socket.isClosed()) {
                 socket.close();

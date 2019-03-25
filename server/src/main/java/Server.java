@@ -9,7 +9,7 @@ public class Server {
     public static final int PORT = 8080;
     public static LinkedList<ServerListener> serverList = new LinkedList<>();
     public static LinkedList<ServerListener> agentList = new LinkedList<>();
-    public static HashMap <String,ServerListener> serverMap = new HashMap<String,ServerListener>();
+
 
     public static History history;
 
