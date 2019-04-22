@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -19,7 +21,7 @@ class ClientListener {
     private Date time;
     private String dtime;
     private SimpleDateFormat dt1;
-
+    private ObjectMapper objectMapper = new ObjectMapper();
     public ClientListener(Socket socket) {
         this.socket = socket;
     }
@@ -50,9 +52,9 @@ class ClientListener {
         try {
             nickname = inputUser.readLine();
             System.out.println("Hello " +type + " " + nickname + "\n");
-            out.write(type + "\n");
-            out.flush();
-            out.write(nickname + "\n");
+            Message message = new Message(nickname,"console","/register",type);
+            out.write(objectMapper.writeValueAsString(message)+"\n");
+            System.out.println(objectMapper.writeValueAsString(message));
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,11 +82,17 @@ class ClientListener {
             try {
                 while (true) {
                     str = in.readLine();
-                    if (str.equals("/disconnect")) {
+                    Message message = objectMapper.readValue(str,Message.class);
+                    if (message.getValue().equals("/disconnect")) {
+                        System.out.println(objectMapper.writeValueAsString(message));
+                        System.out.println("DISCONNECTED");
                         ClientListener.this.downService(); // харакири
                         break;
                     }
-                    System.out.println(str);
+                    time = new Date();
+                    dt1 = new SimpleDateFormat("HH:mm:ss");
+                    dtime = dt1.format(time);
+                    System.out.println("(" + dtime + ") " + message.getUser() + ": " + message.getValue());
                 }
             } catch (IOException e) {
                 ClientListener.this.downService();
@@ -100,16 +108,12 @@ class ClientListener {
             while (true) {
                 String userWord;
                 try {
-                    time = new Date();
-                    dt1 = new SimpleDateFormat("HH:mm:ss");
-                    dtime = dt1.format(time);
                     userWord = inputUser.readLine();
+                    Message message = new Message(nickname,"console",userWord,type);
                     if (userWord.equals("/disconnect")) {
-                        out.write("/disconnect" + "\n");
-                        ClientListener.this.downService();
-                        break;
+                        out.write( objectMapper.writeValueAsString(message) +"\n");
                     } else {
-                        out.write("(" + dtime + ") " + nickname + ": " + userWord + "\n");
+                        out.write((objectMapper.writeValueAsString(message)) +"\n");
                     }
                     out.flush();
                 } catch (IOException e) {

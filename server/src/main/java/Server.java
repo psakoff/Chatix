@@ -6,11 +6,10 @@ import java.util.*;
 
 public class Server {
 
-    public static final int PORT = 8080;
+    public static final int PORT = 8081;
     public static LinkedList<ServerListener> serverList = new LinkedList<>();
-    public static LinkedList<ServerListener> agentList = new LinkedList<>();
-
-
+    public static LinkedList<User> agentList = new LinkedList<>();
+    public static ArrayList<User> userList = new ArrayList<>();
     public static History history;
 
     public static void main(String[] args) throws IOException {
@@ -23,6 +22,7 @@ public class Server {
                 Socket socket = server.accept();
                 try {
                     serverList.add(new ServerListener(socket));
+                    System.out.println("+1");
                 } catch (IOException e) {
 
                     socket.close();

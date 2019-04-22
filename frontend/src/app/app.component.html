@@ -1,0 +1,15 @@
+<div class="container justify-content-center" style="height: 100%;">
+  <div class="d-flex flex-column" style="height: 100%; max-height: 812px;">
+    <h2 class="p-2">{{title}}</h2>
+    <div class="p-2 chat"></div>
+    <input id="input" type="text" class="p-2 mt-auto input-group border border-success rounded"
+           #input
+           (keyup.enter)="sendMessage(input.value)"/>
+  </div>
+
+  <input id="name" type="text" [attr.disabled]="flag ? 'disabled' : null" placeholder="Input your name here to start working" class="p-2 mt-auto input-group border border-success rounded"
+         #name
+         (keyup.enter)="startWorking(name.value,type.value)"/>
+  <input id="type" type="text" [attr.disabled]="flag ? 'disabled' : null" placeholder="Input your type" class="p-2 mt-auto input-group border border-success rounded"
+         #type/>
+</div>

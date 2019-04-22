@@ -14,7 +14,6 @@ public class ClientListenerTest {
     @Test
     public void pressNickname() throws IOException {
         Socket socket = mock(Socket.class);
-
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         String SimulatedInput = "agent"+ System.getProperty("line.separator")+"pasha"+System.getProperty("line.separator")+ "/disconnect" +System.getProperty("line.separator");
         ByteArrayInputStream UserInput = new ByteArrayInputStream(SimulatedInput.getBytes());
@@ -23,7 +22,6 @@ public class ClientListenerTest {
         ClientListener client = new ClientListener(socket);
         System.setIn(new ByteArrayInputStream(SimulatedInput.getBytes()));
         client.start();
-
         assertThat(client.type, is("agent"));
     }
 }
